@@ -1,6 +1,7 @@
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 const config = require('../config');
+// const userValidate = require('../validations/user.validate');
 
 exports.login = async function(req, res, next) {
   try {
@@ -8,23 +9,20 @@ exports.login = async function(req, res, next) {
     const user = await User.findOne({ username });
 
     if (!user) {
-      return res
+      res
         .status(400)
         .json({ success: false, message: "Username doesn't exist" });
     } else {
       const isMatch = await user.comparePassword(password);
-      console.log(isMatch);
 
       if (!isMatch) {
-        return res
-          .status(400)
-          .json({ success: false, message: 'Incorrect password' });
+        res.status(400).json({ success: false, message: 'Incorrect password' });
       } else {
         const token = jwt.sign({ id: user._id }, config.jwt.secret, {
           expiresIn: config.jwt.expired
         });
 
-        return res
+        res
           .status(200)
           .json({ success: true, message: 'Login successfully', token });
       }
@@ -40,7 +38,7 @@ exports.register = async function(req, res, next) {
     const isExisted = await User.findOne({ username });
 
     if (isExisted) {
-      return res
+      res
         .status(400)
         .json({ success: false, message: 'Username already exist' });
     } else {
@@ -51,7 +49,7 @@ exports.register = async function(req, res, next) {
       });
 
       await newUser.save();
-      return res.status(200).json({
+      res.status(200).json({
         success: true,
         message: `Register username ${username} successfully`
       });

@@ -9,9 +9,9 @@ exports.viewProfile = async function(req, res, next) {
     const profile = await User.findById(req.user.id);
 
     if (!profile) {
-      return res.status(400).json({ success: false, message: 'Invalid token' });
+      res.status(400).json({ success: false, message: 'Invalid token' });
     } else {
-      return res.status(200).json({
+      res.status(200).json({
         success: true,
         message: 'Get profile user successfully',
         profile
@@ -28,7 +28,7 @@ exports.updateProfile = async function(req, res, next) {
     const profile = await User.findById(req.user.id);
 
     if (!user) {
-      return res.status(403).json({ success: false, message: 'Invalid token' });
+      res.status(403).json({ success: false, message: 'Invalid token' });
     } else {
       if (user.oldPassword) {
         const isMatch = await profile.comparePassword(user.oldPassword);
@@ -46,7 +46,7 @@ exports.updateProfile = async function(req, res, next) {
       profile.address = user.address;
       const profileUpdated = await profile.save();
 
-      return res
+      res
         .status(200)
         .json({ success: true, message: 'Updated profile', profileUpdated });
     }
