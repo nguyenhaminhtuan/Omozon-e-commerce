@@ -41,7 +41,7 @@ exports.getProductById = async function(req, res, next) {
 
 exports.addProduct = async function(req, res, next) {
   try {
-    const { name, price, brand, description } = req.body;
+    const { name, price, brand, description, category } = req.body;
     const isExisted = await Product.findOne({ name });
 
     if (isExisted) {
@@ -53,7 +53,8 @@ exports.addProduct = async function(req, res, next) {
         name,
         price,
         brand,
-        description
+        description,
+        category
       });
       const product = await newProduct.save();
 
