@@ -1,9 +1,5 @@
 const Product = require('../models/Product');
 
-exports.testController = function(req, res) {
-  res.status(200).json({ msg: 'OK' });
-};
-
 exports.fetchProdcut = async function(req, res, next) {
   try {
     const products = await Product.find({});
