@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const morgan = require('morgan');
 const routes = require('./routes');
-const config = require('./configs');
+const config = require('./config');
 
 // Create Express server
 const server = express();
@@ -27,21 +27,23 @@ server.use(express.urlencoded({ extended: false }));
 // Cross Origin Resoruce Sharing
 server.use(cors());
 // Morgan logger
-server.use(morgan('combined'));
+server.use(morgan('dev'));
 
 // Using routes
 server.use('/', routes);
+
 // Middleware handle not found url
 server.use(function(req, res, next) {
-  const err = new Error('Not Found!');
-  err.status = 404;
-  next(err);
+  const error = new Error('Not Found!');
+  error.status = 404;
+  next(error);
 });
+
 // Middleware handle error
 // eslint-disable-next-line no-unused-vars
 server.use(function(err, req, res, next) {
   if (config.node_env !== 'production') {
-    res.status(err.status || 500).json({ err: err.message });
+    res.status(err.status || 500).json({ error: err.message });
   }
 });
 
