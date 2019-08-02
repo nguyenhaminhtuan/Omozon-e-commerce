@@ -1,7 +1,32 @@
 const User = require('../models/User');
 
-exports.testController = function(req, res) {
-  res.status(200).json({ msg: 'OK' });
+exports.getAllUser = async function(req, res, next) {
+  try {
+    const users = await User.find({});
+
+    res
+      .status(200)
+      .json({ success: true, message: 'Get all user successfully', users });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.getUserById = async function(req, res, next) {
+  try {
+    const { _id } = req.params;
+    const user = User.findById(_id);
+
+    if (user) {
+      res.status(400).json({ success: false, message: 'Invalid id' });
+    } else {
+      res
+        .status(200)
+        .json({ success: true, message: 'Get user successfully', user });
+    }
+  } catch (error) {
+    next(error);
+  }
 };
 
 exports.viewProfile = async function(req, res, next) {
