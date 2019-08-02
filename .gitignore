@@ -1,0 +1,11 @@
+# Dependencies
+node_modules
+
+# Workspace vscode config
+.vscode
+
+# Environtment
+.env
+
+# Log file
+*.log*
