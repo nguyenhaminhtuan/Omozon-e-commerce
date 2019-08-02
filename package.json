@@ -1,7 +1,7 @@
 {
   "name": "e-commerce",
   "version": "1.0.0",
-  "main": "server.js",
+  "main": "src/server.js",
   "repository": "https://github.com/nguyenhaminhtuan/e-commerce.git",
   "author": "nguyenhaminhtuan <nguyenhaminhtuan1997@gmail.com>",
   "license": "MIT",
