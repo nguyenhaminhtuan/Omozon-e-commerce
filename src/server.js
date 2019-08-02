@@ -5,6 +5,7 @@ const cors = require('cors');
 const morgan = require('morgan');
 const routes = require('./routes');
 const config = require('./config');
+const allowDomain = require('./middlewares/allowDonmains');
 
 // Create Express server
 const server = express();
@@ -26,6 +27,7 @@ server.use(express.json());
 server.use(express.urlencoded({ extended: false }));
 // Cross Origin Resoruce Sharing
 server.use(cors());
+server.use(allowDomain);
 // Morgan logger
 server.use(morgan('dev'));
 
