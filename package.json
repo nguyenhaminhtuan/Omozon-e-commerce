@@ -1,10 +1,13 @@
 {
   "name": "e-commerce",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "server.js",
   "repository": "https://github.com/nguyenhaminhtuan/e-commerce.git",
   "author": "nguyenhaminhtuan <nguyenhaminhtuan1997@gmail.com>",
   "license": "MIT",
+  "scripts": {
+    "dev": "nodemon src/server.js"
+  },
   "dependencies": {
     "bcrypt": "^3.0.6",
     "cors": "^2.8.5",
