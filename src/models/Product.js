@@ -3,9 +3,11 @@ const Schema = mongoose.Schema;
 
 const productSchema = new Schema({
   name: { type: String, required: true },
-  price: { type: String, required: true },
+  price: { type: Number, required: true },
   brand: { type: String, required: true },
-  categories: [{ type: Schema.Types.ObjectId, ref: 'Category' }]
+  description: { type: String },
+  categories: [{ type: Schema.Types.ObjectId, ref: 'Category' }],
+  addedDate: { type: Date, default: Date.now() }
 });
 
 const Product = mongoose.model('Product', productSchema);
