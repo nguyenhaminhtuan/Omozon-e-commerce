@@ -1,4 +1,5 @@
 const Product = require('../models/Product');
+const Category = require('../models/Category');
 
 exports.fetchProdcut = async function(req, res, next) {
   try {
@@ -35,7 +36,7 @@ exports.getProductById = async function(req, res, next) {
 
 exports.addProduct = async function(req, res, next) {
   try {
-    const { name, price, brand, description, category } = req.body;
+    const { name, price, brand, description, categories } = req.body;
     const isExisted = await Product.findOne({ name });
 
     if (isExisted) {
@@ -48,10 +49,17 @@ exports.addProduct = async function(req, res, next) {
         price,
         brand,
         description,
-        category
+        categories
       });
-      const product = await newProduct.save();
 
+      categories.map(async function(category) {
+        await Category.updateOne(
+          { _id: category },
+          { $push: { products: product } }
+        );
+      });
+
+      const product = await newProduct.save();
       return res
         .status(200)
         .json({ success: true, message: 'Added product', product });
@@ -64,16 +72,31 @@ exports.addProduct = async function(req, res, next) {
 exports.updateProduct = async function(req, res, next) {
   try {
     const { _id } = req.params;
-    const { name, price, brand, description, category } = await req.body;
-    const product = await Product.updateOne(
-      { _id },
-      { name, price, brand, description, category }
-    );
+    const { name, price, brand, description, categories } = await req.body;
+    const product = await Product.findById(_id);
 
     if (product) {
+      const categoriesRemoved = product.categories.filter(function(categoryId) {
+        for (let i = 0; i < categories.length; i++) {
+          return categories[i] !== categoryId;
+        }
+      });
+
+      const productUpdated = await Product.updateOne(
+        { _id },
+        { name, price, brand, description, categories }
+      );
+
+      categoriesRemoved.map(async function(category) {
+        await Category.updateOne(
+          { _id: category },
+          { $pull: { products: productUpdated._id } }
+        );
+      });
+
       return res
         .status(200)
-        .json({ success: true, message: 'Product updated' }, product);
+        .json({ success: true, message: 'Product updated' }, productUpdated);
     }
   } catch (error) {
     next(error);
@@ -83,12 +106,20 @@ exports.updateProduct = async function(req, res, next) {
 exports.removeProduct = async function(req, res, next) {
   try {
     const { _id } = req.params;
-    const product = await Product.deleteOne({ _id });
+    const product = await Product.findById(_id);
+    const productRemoved = await Product.deleteOne({ _id });
 
     if (product) {
+      product.categories.map(async function(category) {
+        await Category.updateOne(
+          { _id: category },
+          { $pull: { products: product._id } }
+        );
+      });
+
       return res
         .status(200)
-        .json({ success: true, message: 'Product removed', product });
+        .json({ success: true, message: 'Product removed', productRemoved });
     }
   } catch (error) {
     next(error);
