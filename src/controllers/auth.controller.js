@@ -18,9 +18,13 @@ exports.login = async function(req, res, next) {
       if (!isMatch) {
         res.status(400).json({ success: false, message: 'Incorrect password' });
       } else {
-        const token = jwt.sign({ id: user._id }, config.jwt.secret, {
-          expiresIn: config.jwt.expired
-        });
+        const token = jwt.sign(
+          { id: user._id, roles: user.roles },
+          config.jwt.secret,
+          {
+            expiresIn: config.jwt.expired
+          }
+        );
 
         res
           .status(200)
@@ -51,7 +55,7 @@ exports.register = async function(req, res, next) {
       await newUser.save();
       res.status(200).json({
         success: true,
-        message: `Register username ${username} successfully`
+        message: `Register username ${newUser.username} successfully`
       });
     }
   } catch (error) {
