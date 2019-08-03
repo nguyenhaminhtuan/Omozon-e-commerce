@@ -94,9 +94,11 @@ exports.updateProduct = async function(req, res, next) {
         );
       });
 
-      return res
-        .status(200)
-        .json({ success: true, message: 'Product updated' }, productUpdated);
+      return res.status(200).json({
+        success: true,
+        message: 'Product updated',
+        product: productUpdated
+      });
     }
   } catch (error) {
     next(error);
@@ -117,9 +119,11 @@ exports.removeProduct = async function(req, res, next) {
         );
       });
 
-      return res
-        .status(200)
-        .json({ success: true, message: 'Product removed', productRemoved });
+      return res.status(200).json({
+        success: true,
+        message: 'Product removed',
+        product: productRemoved
+      });
     }
   } catch (error) {
     next(error);
