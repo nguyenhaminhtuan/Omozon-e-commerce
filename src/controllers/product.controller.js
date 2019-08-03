@@ -5,7 +5,7 @@ exports.fetchProdcut = async function(req, res, next) {
     const products = await Product.find({});
 
     if (products) {
-      res.status(200).json({
+      return res.status(200).json({
         success: true,
         message: 'Get all product successfully',
         products
@@ -21,10 +21,8 @@ exports.getProductById = async function(req, res, next) {
     const { _id } = req.params;
     const product = Product.findById(_id);
 
-    if (!product) {
-      res.status(400).json({ success: false, message: 'Get product failed' });
-    } else {
-      res.status(200).json({
+    if (product) {
+      return res.status(200).json({
         success: true,
         message: `Get product ${product._id} successfully`,
         product
@@ -41,7 +39,7 @@ exports.addProduct = async function(req, res, next) {
     const isExisted = await Product.findOne({ name });
 
     if (isExisted) {
-      res
+      return res
         .status(400)
         .json({ success: false, message: 'Product name already exist' });
     } else {
@@ -54,7 +52,7 @@ exports.addProduct = async function(req, res, next) {
       });
       const product = await newProduct.save();
 
-      res
+      return res
         .status(200)
         .json({ success: true, message: 'Added product', product });
     }
@@ -72,12 +70,8 @@ exports.updateProduct = async function(req, res, next) {
       { name, price, brand, description, category }
     );
 
-    if (!product) {
-      res
-        .status(400)
-        .json({ success: false, message: 'Update product failed' });
-    } else {
-      res
+    if (product) {
+      return res
         .status(200)
         .json({ success: true, message: 'Product updated' }, product);
     }
@@ -91,12 +85,8 @@ exports.removeProduct = async function(req, res, next) {
     const { _id } = req.params;
     const product = await Product.deleteOne({ _id });
 
-    if (!product) {
-      res
-        .status(400)
-        .json({ success: false, message: 'Remove product failed' });
-    } else {
-      res
+    if (product) {
+      return res
         .status(200)
         .json({ success: true, message: 'Product removed', product });
     }
