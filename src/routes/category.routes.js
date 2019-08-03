@@ -8,7 +8,7 @@ router.get('/', categoryController.getAllCategory);
 router.get('/:_id', categoryController.getCategoryById);
 
 // Routes for admin
-router.post('/add', authCheck, rolesCheck, categoryController.addProduct);
+router.post('/add', authCheck, rolesCheck, categoryController.addCategory);
 router.put(
   '/update/:_id',
   authCheck,
@@ -19,7 +19,7 @@ router.delete(
   '/remove/:_id',
   authCheck,
   rolesCheck,
-  categoryController.removeProduct
+  categoryController.removeCategory
 );
 router.put(
   '/add-produdct-to-category/:_id',
