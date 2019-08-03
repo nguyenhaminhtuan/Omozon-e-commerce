@@ -62,3 +62,23 @@ exports.register = async function(req, res, next) {
     next(error);
   }
 };
+
+// Only for development
+exports.createAdmin = async function(req, res, next) {
+  try {
+    const username = 'admin';
+    const password = 'admin';
+    const roles = 'admin';
+    const hash = await User.generateHash(password);
+    const admin = new User({
+      username,
+      password: hash,
+      roles
+    });
+    await admin.save();
+
+    res.status(200).json({ message: 'Admin created' });
+  } catch (error) {
+    next(error);
+  }
+};
