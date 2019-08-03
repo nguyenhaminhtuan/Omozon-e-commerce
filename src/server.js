@@ -46,6 +46,8 @@ server.use(function(req, res, next) {
 server.use(function(err, req, res, next) {
   if (config.node_env !== 'production') {
     res.status(err.status || 500).json({ error: err.message });
+  } else {
+    console.error(err.message);
   }
 });
 
