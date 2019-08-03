@@ -4,7 +4,7 @@ exports.getAllUser = async function(req, res, next) {
   try {
     const users = await User.find({});
 
-    res
+    return res
       .status(200)
       .json({ success: true, message: 'Get all user successfully', users });
   } catch (error) {
@@ -18,9 +18,7 @@ exports.getUserById = async function(req, res, next) {
     const user = User.findById(_id);
 
     if (user) {
-      res.status(400).json({ success: false, message: 'Invalid id' });
-    } else {
-      res
+      return res
         .status(200)
         .json({ success: true, message: 'Get user successfully', user });
     }
@@ -33,10 +31,8 @@ exports.viewProfile = async function(req, res, next) {
   try {
     const profile = await User.findById(req.user.id);
 
-    if (!profile) {
-      res.status(400).json({ success: false, message: 'Invalid token' });
-    } else {
-      res.status(200).json({
+    if (profile) {
+      return res.status(200).json({
         success: true,
         message: 'Get profile user successfully',
         profile
@@ -52,9 +48,7 @@ exports.updateProfile = async function(req, res, next) {
     const { user } = req.body;
     const profile = await User.findById(req.user.id);
 
-    if (!user) {
-      res.status(403).json({ success: false, message: 'Invalid token' });
-    } else {
+    if (profile) {
       if (user.oldPassword) {
         const isMatch = await profile.comparePassword(user.oldPassword);
 
@@ -71,7 +65,7 @@ exports.updateProfile = async function(req, res, next) {
       profile.address = user.address;
       const profileUpdated = await profile.save();
 
-      res
+      return res
         .status(200)
         .json({ success: true, message: 'Updated profile', profileUpdated });
     }
