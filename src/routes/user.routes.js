@@ -8,9 +8,10 @@ router.use(authCheck);
 
 // Admin routes
 router.get('/', rolesCheck, userController.getAllUser);
-router.get('/', rolesCheck, userController.getUserById);
+router.get('/:_id', rolesCheck, userController.getUserById);
 
 // User routes
 router.get('/profile', userController.viewProfile);
 router.post('/profile/update', userController.updateProfile);
+
 module.exports = router;
