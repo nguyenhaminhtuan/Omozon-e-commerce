@@ -21,5 +21,11 @@ router.delete(
   rolesCheck,
   categoryController.removeProduct
 );
+router.put(
+  '/add-produdct-to-category/:_id',
+  authCheck,
+  rolesCheck,
+  categoryController.addProductToCategory
+);
 
 module.exports = router;
