@@ -1,4 +1,5 @@
 const Category = require('../models/Category');
+const Product = require('../models/Product');
 
 exports.getAllCategory = async function(req, res, next) {
   try {
@@ -26,7 +27,7 @@ exports.getCategoryById = async function(req, res, next) {
   }
 };
 
-exports.addProduct = async function(req, res, next) {
+exports.addCategory = async function(req, res, next) {
   try {
     const { name } = req.body;
     const isExisted = await Category.findOne({ name });
@@ -66,15 +67,76 @@ exports.updateCategory = async function(req, res, next) {
   }
 };
 
-exports.removeProduct = async function(req, res, next) {
+exports.removeCategory = async function(req, res, next) {
   try {
     const { _id } = req.params;
     const category = await Category.deleteOne({ _id });
 
     if (category) {
+      category.products.map(async function(product) {
+        await Product.updateOne(
+          { _id: product },
+          { $pull: { categories: category._id } }
+        );
+      });
+
       return res
         .status(200)
         .json({ success: true, message: 'Category deleted', category });
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.addProductToCategory = async function(req, res, next) {
+  try {
+    const { _id } = req.params;
+    const { productId } = req.body;
+    const product = await Product.findById(productId);
+
+    if (product) {
+      const category = await Category.updateOne(
+        { _id },
+        { $push: { products: product._id } }
+      );
+
+      if (category) {
+        return res.status(200).json({
+          success: true,
+          message: `Added product ${product._id} to category ${category._id}`,
+          product,
+          category
+        });
+      }
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.removeProductFromCategory = async function(req, res, next) {
+  try {
+    const { _id } = req.params;
+    const { productId } = req.body;
+    const product = await Product.findById(productId);
+
+    if (product) {
+      const category = await Category.updateOne(
+        { _id },
+        { $pull: { products: product._id } }
+      );
+      await Product.updateOne(
+        { _id: product._id },
+        { $pull: { categories: category._id } }
+      );
+
+      return res.status(200).json({
+        success: true,
+        message: `Product ${product._id} removed from category ${category._id}`,
+        category,
+        product
+      });
     }
   } catch (error) {
     next(error);
