@@ -1,17 +1,18 @@
-const Joi = require('joi');
+const { Joi } = require('celebrate');
 
-const userSchema = Joi.object().keys({
-  username: Joi.string()
-    .alphanum()
-    .min(6)
-    .max(40)
-    .required(),
-  password: Joi.string()
-    .alphanum()
-    .min(6)
-    .max(40)
-    .required(),
-  address: Joi.string().max(150)
-});
-
-module.exports = userSchema;
+module.exports = {
+  getId: {
+    params: {
+      _id: Joi.string().required()
+    },
+    user: Joi.object().required()
+  },
+  updateProfile: {
+    body: {
+      oldPassword: Joi.string(),
+      newPassword: Joi.string(),
+      address: Joi.string()
+    },
+    user: Joi.object().required()
+  }
+};
