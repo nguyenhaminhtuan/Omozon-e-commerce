@@ -1,9 +1,6 @@
 const { Joi } = require('celebrate');
 
 module.exports = {
-  token: {
-    user: Joi.object().required()
-  },
   getId: {
     params: {
       _id: Joi.string().required()
@@ -12,17 +9,15 @@ module.exports = {
   addCategory: {
     body: {
       name: Joi.string().required()
-    },
-    user: Joi.object().required()
+    }
   },
   updateName: {
     body: {
-      name: Joi.string().required
+      name: Joi.string().required()
     },
     params: {
       _id: Joi.string().required()
-    },
-    user: Joi.object().required()
+    }
   },
   addAndRemoveProduct: {
     body: {
@@ -30,7 +25,6 @@ module.exports = {
     },
     params: {
       _id: Joi.string().required()
-    },
-    user: Joi.object().required()
+    }
   }
 };

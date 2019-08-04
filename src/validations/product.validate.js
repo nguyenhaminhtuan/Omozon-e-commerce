@@ -10,8 +10,7 @@ module.exports = {
       brand: Joi.string().required(),
       description: Joi.string(),
       categories: Joi.array()
-    }),
-    user: Joi.object().required()
+    })
   },
   update: {
     body: Joi.object().keys({
@@ -25,8 +24,7 @@ module.exports = {
     }),
     params: {
       _id: Joi.string().required()
-    },
-    user: Joi.object().required()
+    }
   },
   getId: {
     params: {
