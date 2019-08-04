@@ -42,5 +42,12 @@ router.put(
   celebrate(categoryValidate.addAndRemoveProduct),
   categoryController.addProductToCategory
 );
+router.put(
+  '/remove-product-from-category/:_id',
+  authCheck,
+  rolesCheck,
+  celebrate(categoryValidate.addAndRemoveProduct),
+  categoryController.removeProductFromCategory
+);
 
 module.exports = router;
