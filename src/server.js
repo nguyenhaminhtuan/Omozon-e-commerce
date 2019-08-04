@@ -41,16 +41,14 @@ server.use(function(req, res, next) {
   next(error);
 });
 
-// Middleware handle error
+// Middleware handle errors
 // eslint-disable-next-line no-unused-vars
 server.use(function(err, req, res, next) {
   if (config.node_env !== 'production') {
     res.status(err.status || 500).json({ error: err.message });
   } else {
     console.error(err.message);
-    res
-      .status(err.status || 500)
-      .json({ message: 'Oops, something went wrong!' });
+    res.status(500).json({ message: 'Oops, something went wrong!' });
   }
 });
 
