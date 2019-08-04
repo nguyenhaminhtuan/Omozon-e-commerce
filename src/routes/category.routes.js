@@ -36,7 +36,7 @@ router.delete(
   categoryController.removeCategory
 );
 router.put(
-  '/add-produdct-to-category/:_id',
+  '/add-product-to-category/:_id',
   authCheck,
   rolesCheck,
   celebrate(categoryValidate.addAndRemoveProduct),
