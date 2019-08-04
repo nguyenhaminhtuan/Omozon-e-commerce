@@ -93,22 +93,22 @@ exports.addProductToCategory = async function(req, res, next) {
   try {
     const { _id } = req.params;
     const { productId } = req.body;
+    const category = await Category.findById(_id);
     const product = await Product.findById(productId);
 
-    if (product) {
-      const category = await Category.updateOne(
-        { _id },
-        { $push: { products: product._id } }
-      );
+    // Kiểm tra tồn tại product trong category
+    // Update products trong category
+    // Update categories trong product
 
-      if (category) {
-        return res.status(200).json({
-          success: true,
-          message: `Added product ${product._id} to category ${category._id}`,
-          product,
-          category
-        });
-      }
+    if (product) {
+      await Category.updateOne({ _id }, { $push: { products: product._id } });
+      await Product.updateOne({ _id }, { $push: { categories: category._id } });
+
+      return res.status(200).json({
+        success: true,
+        message: `Added product ${product._id} to category ${_id}`,
+        product
+      });
     }
   } catch (error) {
     next(error);
@@ -120,12 +120,14 @@ exports.removeProductFromCategory = async function(req, res, next) {
     const { _id } = req.params;
     const { productId } = req.body;
     const product = await Product.findById(productId);
+    const category = await Category.findById(_id);
+
+    // Kiểm tra tồn tại product trong category
+    // Update products trong category
+    // Update categories trong product
 
     if (product) {
-      const category = await Category.updateOne(
-        { _id },
-        { $pull: { products: product._id } }
-      );
+      await Category.updateOne({ _id }, { $pull: { products: product._id } });
       await Product.updateOne(
         { _id: product._id },
         { $pull: { categories: category._id } }
@@ -133,8 +135,7 @@ exports.removeProductFromCategory = async function(req, res, next) {
 
       return res.status(200).json({
         success: true,
-        message: `Product ${product._id} removed from category ${category._id}`,
-        category,
+        message: `Product ${product._id} removed from category ${_id}`,
         product
       });
     }
