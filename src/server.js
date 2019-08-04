@@ -48,6 +48,9 @@ server.use(function(err, req, res, next) {
     res.status(err.status || 500).json({ error: err.message });
   } else {
     console.error(err.message);
+    res
+      .status(err.status || 500)
+      .json({ message: 'Oops, something went wrong!' });
   }
 });
 
