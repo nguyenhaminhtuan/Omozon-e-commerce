@@ -45,15 +45,15 @@ exports.viewProfile = async function(req, res, next) {
 
 exports.updateProfile = async function(req, res, next) {
   try {
-    const { user } = req.body;
+    const { oldPassword, newPassword, address } = req.body;
     const profile = await User.findById(req.user.id);
 
     if (profile) {
-      if (user.oldPassword) {
-        const isMatch = await profile.comparePassword(user.oldPassword);
+      if (oldPassword) {
+        const isMatch = await profile.comparePassword(oldPassword);
 
         if (isMatch) {
-          const hash = await User.generateHash(user.newPassword);
+          const hash = await User.generateHash(newPassword);
           profile.password = hash;
         } else {
           return res
@@ -62,7 +62,7 @@ exports.updateProfile = async function(req, res, next) {
         }
       }
 
-      profile.address = user.address;
+      profile.address = address;
       const profileUpdated = await profile.save();
 
       return res
