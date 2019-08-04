@@ -1,7 +1,6 @@
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 const config = require('../config');
-// const userValidate = require('../validations/user.validate');
 
 exports.login = async function(req, res, next) {
   try {
