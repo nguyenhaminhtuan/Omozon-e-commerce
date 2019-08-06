@@ -1,40 +1,46 @@
 const Product = require('../models/Product');
 const Category = require('../models/Category');
 
-exports.fetchProdcut = async function(req, res) {
-  const products = await Product.find({});
+exports.fetchProduct = async function(req, res, next) {
+  try {
+    const products = await Product.find({});
 
-  if (products) {
-    return res.status(200).json({
-      success: true,
-      message: 'Get all product successfully',
-      products
-    });
+    if (products)
+      return res
+        .status(200)
+        .json({ success: true, message: 'Fetched all product', products });
+  } catch (error) {
+    next(error);
   }
 };
 
-exports.getProductById = async function(req, res) {
-  const { _id } = req.params;
-  const product = Product.findById(_id);
+exports.getProductById = async function(req, res, next) {
+  try {
+    const product = await Product.findById(req.params.id);
 
-  if (product) {
-    return res.status(200).json({
-      success: true,
-      message: `Get product ${product._id} successfully`,
-      product
-    });
-  }
-};
+    if (!product)
+      return res.status(404).json({
+        success: false,
+        message: `There is no product with id ${product.id}`
+      });
 
-exports.addProduct = async function(req, res) {
-  const { name, price, brand, description, categories } = req.body;
-  const isExisted = await Product.findOne({ name });
-
-  if (isExisted) {
     return res
-      .status(400)
-      .json({ success: false, message: 'Product name already exist' });
-  } else {
+      .status(200)
+      .json({ success: true, message: 'Get product success', product });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.addProduct = async function(req, res, next) {
+  try {
+    const { name, price, brand, description, categories } = req.body;
+    const isExisted = await Product.findOne({ name });
+
+    if (isExisted)
+      return res
+        .status(400)
+        .json({ success: true, message: 'Product name already exist' });
     const newProduct = new Product({
       name,
       price,
@@ -42,70 +48,75 @@ exports.addProduct = async function(req, res) {
       description,
       categories
     });
-
-    categories.map(async function(category) {
+    const product = await newProduct.save();
+    categories.map(async category => {
       await Category.updateOne(
         { _id: category },
-        { $push: { products: product } }
+        { $push: { products: product._id } }
       );
     });
 
-    const product = await newProduct.save();
     return res
       .status(200)
       .json({ success: true, message: 'Added product', product });
+  } catch (error) {
+    next(error);
   }
 };
 
-exports.updateProduct = async function(req, res) {
-  const { _id } = req.params;
-  const { name, price, brand, description, categories } = await req.body;
-  const product = await Product.findById(_id);
+exports.updateProduct = async function(req, res, next) {
+  try {
+    const { categories } = req.body;
+    const product = await Product.findById(req.params.id);
 
-  if (product) {
-    const categoriesRemoved = product.categories.filter(function(categoryId) {
-      for (let i = 0; i < categories.length; i++) {
-        return categories[i] !== categoryId;
-      }
-    });
+    if (!product)
+      return res.status(404).json({
+        success: false,
+        message: `There is no product with id ${product.id}`
+      });
 
-    const productUpdated = await Product.updateOne(
-      { _id },
-      { name, price, brand, description, categories }
-    );
-
-    categoriesRemoved.map(async function(category) {
-      await Category.updateOne(
-        { _id: category },
-        { $pull: { products: productUpdated._id } }
-      );
-    });
-
-    return res.status(200).json({
-      success: true,
-      message: 'Product updated',
-      product: productUpdated
-    });
-  }
-};
-
-exports.removeProduct = async function(req, res) {
-  const { _id } = req.params;
-  const product = await Product.findById(_id);
-  const productRemoved = await Product.deleteOne({ _id });
-
-  if (product) {
-    product.categories.map(async function(category) {
+    product.categories.map(async category => {
       await Category.updateOne(
         { _id: category },
         { $pull: { products: product._id } }
       );
     });
-
-    return res.status(200).json({
-      success: true,
-      message: 'Product removed',
-      product: productRemoved
+    await Product.updateOne({ _id: product._id }, req.body);
+    categories.map(async category => {
+      await Category.updateOne(
+        { _id: category },
+        { $push: { products: product._id } }
+      );
     });
+
+    return res
+      .status(200)
+      .json({ success: true, message: 'Product added', product });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.removeProduct = async function(req, res, next) {
+  try {
+    const product = await Product.findById(req.params.id);
+
+    if (!product)
+      return res.status(404).json({
+        success: false,
+        message: `There is no product with id ${product.id}`
+      });
+
+    product.categories.map(async category => [
+      await Category.updateOne(
+        { _id: category },
+        { $pull: { products: product._id } }
+      )
+    ]);
+    await Product.deleteOne({ _id: product._id });
+
+    return res.status(200).json({ success: true, message: 'Product removed' });
+  } catch (error) {
+    next(error);
   }
 };
