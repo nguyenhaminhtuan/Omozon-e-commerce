@@ -158,19 +158,20 @@ exports.removeProduct = async function(req, res, next) {
         message: `There is no product with id ${req.body.productId}`
       });
 
-    product.categories.map(async category => {
-      await Category.updateOne(
-        { _id: category._id },
-        { $pull: { products: product._id } }
+    category.products.map(async product => {
+      await Product.updateOne(
+        { _id: product },
+        { $pull: { categories: category._id } }
       );
     });
-    await Category.deleteOne({ _id: category._id });
+    await Category.updateOne(
+      { _id: category._id },
+      { $pull: { products: product._id } }
+    );
 
     return res.status(200).json({
       success: true,
-      message: `Product ${product.id} removed from category ${category.id}`,
-      category,
-      product
+      message: `Product ${product.id} removed from category ${category.id}`
     });
   } catch (error) {
     next(error);
