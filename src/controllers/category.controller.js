@@ -1,120 +1,170 @@
 const Category = require('../models/Category');
 const Product = require('../models/Product');
 
-exports.getAllCategory = async function(req, res) {
-  const categories = await Category.find({});
-  return res
-    .status(200)
-    .json({ success: true, message: 'Get all Category success', categories });
-};
+exports.fetchCategory = async function(req, res, next) {
+  try {
+    const categories = await Category.find({});
 
-exports.getCategoryById = async function(req, res) {
-  const { _id } = req.params;
-  const category = await Category.findById(_id);
-
-  if (category) {
-    return res
-      .status(200)
-      .json({ success: true, message: `Category ${category._id}` });
+    if (categories) {
+      return res
+        .status(200)
+        .json({ success: true, message: 'Get all categories success' });
+    }
+  } catch (error) {
+    next(error);
   }
 };
 
-exports.addCategory = async function(req, res) {
-  const { name } = req.body;
-  const isExisted = await Category.findOne({ name });
+exports.getCategoryById = async function(req, res, next) {
+  try {
+    const category = await Category.findById(req.params.id);
 
-  if (isExisted) {
-    return res
-      .status(400)
-      .json({ success: false, message: 'Category name already exist' });
-  } else {
-    const newCategory = new Category({
+    if (!category)
+      return res.status(404).json({
+        success: false,
+        message: `There is no category with id ${req.params.id}`
+      });
+
+    return res.status(200).json({
+      success: true,
+      message: `Get category ${category.id} success`,
+      category
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.addCategory = async function(req, res, next) {
+  try {
+    const { name } = req.body;
+    const isExisted = await Category.findOne({ name });
+
+    if (isExisted)
+      return res
+        .status(400)
+        .json({ success: false, message: 'Category name already existed' });
+
+    const category = new Category({
       name
     });
-    const category = await newCategory.save();
+    await category.save();
 
-    return res
-      .status(200)
-      .json({ success: true, message: 'Category added', category });
+    res.status(200).json({ success: true, message: 'Category Added' });
+  } catch (error) {
+    next(error);
   }
 };
 
-exports.updateCategory = async function(req, res) {
-  const { _id } = req.params;
-  const { name } = req.body;
-  const category = await Category.updateOne({ _id }, { name });
+exports.updateCategory = async function(req, res, next) {
+  try {
+    const category = await Category.findById(req.params.id);
 
-  if (category) {
+    if (!category)
+      return res.status(404).json({
+        success: false,
+        message: `There is no category with id ${req.params.id}`
+      });
+
+    category.name = req.body.name;
+    await category.save();
+
     return res
       .status(200)
-      .json({ success: true, message: 'Category updated', category });
+      .json({ success: true, message: `Category ${category.id} updated` });
+  } catch (error) {
+    next(error);
   }
 };
 
-exports.removeCategory = async function(req, res) {
-  const { _id } = req.params;
-  const category = await Category.deleteOne({ _id });
+exports.removeCategory = async function(req, res, next) {
+  try {
+    const category = await Category.findById(req.params.id);
 
-  if (category) {
-    category.products.map(async function(product) {
+    if (!category)
+      return res.status(404).json({
+        success: false,
+        message: `There is no category with id ${req.params.id}`
+      });
+
+    category.products.map(async product => {
       await Product.updateOne(
-        { _id: product },
+        { _id: product._id },
         { $pull: { categories: category._id } }
       );
     });
+    await Category.deleteOne({ _id: category._id });
 
     return res
       .status(200)
-      .json({ success: true, message: 'Category deleted', category });
+      .json({ success: true, message: `Category ${category.id} removed` });
+  } catch (error) {
+    next(error);
   }
 };
 
-exports.addProductToCategory = async function(req, res) {
-  const { _id } = req.params;
-  const { productId } = req.body;
-  const category = await Category.findById(_id);
-  const product = await Product.findById(productId);
+exports.addProduct = async function(req, res, next) {
+  try {
+    const category = await Category.findById(req.params.id);
+    const product = await Product.findById(req.body.productId);
 
-  // Kiểm tra tồn tại product trong category
-  // Update products trong category
-  // Update categories trong product
+    if (!category)
+      return res.status(404).json({
+        success: false,
+        message: `There is no category with id ${req.params.id}`
+      });
 
-  if (product) {
-    await Product.updateOne(
-      { _id: product._id },
-      { $push: { categories: category._id } }
-    );
-    await Category.updateOne({ _id }, { $push: { products: product._id } });
+    if (!product)
+      return res.status(404).json({
+        success: false,
+        message: `There is no product with id ${req.body.productId}`
+      });
+
+    category.products.push(product._id);
+    product.categories.push(category._id);
+
+    await category.save();
+    await product.save();
 
     return res.status(200).json({
       success: true,
-      message: `Added product ${product._id} to category ${_id}`,
-      product
+      message: `Added product ${product.id} to category ${category.id}`
     });
+  } catch (error) {
+    next(error);
   }
 };
 
-exports.removeProductFromCategory = async function(req, res) {
-  const { _id } = req.params;
-  const { productId } = req.body;
-  const product = await Product.findById(productId);
-  const category = await Category.findById(_id);
+exports.removeProduct = async function(req, res, next) {
+  try {
+    const category = await Category.findById(req.params.id);
+    const product = await Product.findById(req.body.productId);
 
-  // Kiểm tra tồn tại product trong category
-  // Update products trong category
-  // Update categories trong product
+    if (!category)
+      return res.status(404).json({
+        success: false,
+        message: `There is no category with id ${req.params.id}`
+      });
 
-  if (product) {
-    await Category.updateOne({ _id }, { $pull: { products: product._id } });
-    await Product.updateOne(
-      { _id: product._id },
-      { $pull: { categories: category._id } }
-    );
+    if (!product)
+      return res.status(404).json({
+        success: false,
+        message: `There is no product with id ${req.body.productId}`
+      });
+
+    product.categories.map(async category => {
+      await Category.updateOne(
+        { _id: category._id },
+        { $pull: { products: product._id } }
+      );
+    });
+    await Category.deleteOne({ _id: category._id });
 
     return res.status(200).json({
       success: true,
-      message: `Product ${product._id} removed from category ${_id}`,
-      product
+      message: `Product ${product.id} removed from category ${category.id}`
     });
+  } catch (error) {
+    next(error);
   }
 };
