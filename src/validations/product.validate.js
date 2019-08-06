@@ -1,34 +1,22 @@
-const { Joi } = require('celebrate');
+const Joi = require('joi');
 
 module.exports = {
-  add: {
-    body: Joi.object().keys({
-      name: Joi.string().required(),
-      price: Joi.number()
-        .integer()
-        .required(),
-      brand: Joi.string().required(),
-      description: Joi.string(),
-      categories: Joi.array()
-    })
-  },
-  update: {
-    body: Joi.object().keys({
-      name: Joi.string().required(),
-      price: Joi.number()
-        .integer()
-        .required(),
-      brand: Joi.string().required(),
-      description: Joi.string(),
-      categories: Joi.array()
-    }),
-    params: {
-      _id: Joi.string().required()
-    }
-  },
-  getId: {
-    params: {
-      _id: Joi.string().required()
-    }
-  }
+  product: Joi.object().keys({
+    name: Joi.string()
+      .min(3)
+      .max(150)
+      .alphanum()
+      .required(),
+    price: Joi.number()
+      .integer()
+      .min(10000)
+      .required(),
+    brand: Joi.string()
+      .min(3)
+      .max(150)
+      .alphanum()
+      .required(),
+    description: Joi.string().min(10),
+    categories: Joi.array()
+  })
 };

@@ -1,16 +1,26 @@
-const { Joi } = require('celebrate');
+const Joi = require('joi');
 
 module.exports = {
-  getId: {
-    params: {
-      _id: Joi.string().required()
-    }
-  },
-  updateProfile: {
-    body: {
-      oldPassword: Joi.string(),
-      newPassword: Joi.string(),
-      address: Joi.string()
-    }
-  }
+  user: Joi.object().keys({
+    name: Joi.string()
+      .alphanum()
+      .min(3)
+      .max(150)
+      .required(),
+    address: Joi.string(6)
+      .max(255)
+      .required()
+  }),
+  password: Joi.object().keys({
+    oldPassword: Joi.string()
+      .alphanum()
+      .min(6)
+      .max(150)
+      .required(),
+    newPassword: Joi.string()
+      .alphanum()
+      .min(6)
+      .max(150)
+      .required()
+  })
 };

@@ -1,30 +1,14 @@
-const { Joi } = require('celebrate');
+const Joi = require('joi');
+Joi.objectId = require('joi-objectid')(Joi);
 
 module.exports = {
-  getId: {
-    params: {
-      _id: Joi.string().required()
-    }
-  },
-  addCategory: {
-    body: {
-      name: Joi.string().required()
-    }
-  },
-  updateName: {
-    body: {
-      name: Joi.string().required()
-    },
-    params: {
-      _id: Joi.string().required()
-    }
-  },
-  addAndRemoveProduct: {
-    body: {
-      productId: Joi.string().required()
-    },
-    params: {
-      _id: Joi.string().required()
-    }
-  }
+  category: Joi.object().keys({
+    name: Joi.string()
+      .min(3)
+      .max(255)
+      .required()
+  }),
+  product: Joi.object().keys({
+    productId: Joi.objectId().required()
+  })
 };
