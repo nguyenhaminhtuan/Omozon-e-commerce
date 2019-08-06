@@ -16,7 +16,7 @@ module.exports = {
       .min(3)
       .max(255)
       .required(),
-    adress: Joi.string()
+    address: Joi.string()
       .min(6)
       .max(255)
       .required()
@@ -27,7 +27,7 @@ module.exports = {
       .min(3)
       .max(150)
       .required(),
-    address: Joi.string(6)
+    address: Joi.string()
       .max(255)
       .required()
   }),
