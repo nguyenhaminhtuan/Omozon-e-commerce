@@ -2,6 +2,8 @@
 
 ### Usage
 
+> npm run dev
+
 ```
 ├── package.json
 ├── package-lock.json
