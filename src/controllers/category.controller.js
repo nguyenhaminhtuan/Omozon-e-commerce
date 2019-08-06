@@ -6,9 +6,11 @@ exports.fetchCategory = async function(req, res, next) {
     const categories = await Category.find({});
 
     if (categories) {
-      return res
-        .status(200)
-        .json({ success: true, message: 'Get all categories success' });
+      return res.status(200).json({
+        success: true,
+        message: 'Get all categories success',
+        categories
+      });
     }
   } catch (error) {
     next(error);
@@ -50,7 +52,9 @@ exports.addCategory = async function(req, res, next) {
     });
     await category.save();
 
-    res.status(200).json({ success: true, message: 'Category Added' });
+    res
+      .status(200)
+      .json({ success: true, message: 'Category Added', category });
   } catch (error) {
     next(error);
   }
@@ -128,7 +132,9 @@ exports.addProduct = async function(req, res, next) {
 
     return res.status(200).json({
       success: true,
-      message: `Added product ${product.id} to category ${category.id}`
+      message: `Added product ${product.id} to category ${category.id}`,
+      category,
+      product
     });
   } catch (error) {
     next(error);
@@ -162,7 +168,9 @@ exports.removeProduct = async function(req, res, next) {
 
     return res.status(200).json({
       success: true,
-      message: `Product ${product.id} removed from category ${category.id}`
+      message: `Product ${product.id} removed from category ${category.id}`,
+      category,
+      product
     });
   } catch (error) {
     next(error);
