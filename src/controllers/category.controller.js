@@ -101,8 +101,11 @@ exports.addProductToCategory = async function(req, res, next) {
     // Update categories trong product
 
     if (product) {
+      await Product.updateOne(
+        { _id: product._id },
+        { $push: { categories: category._id } }
+      );
       await Category.updateOne({ _id }, { $push: { products: product._id } });
-      await Product.updateOne({ _id }, { $push: { categories: category._id } });
 
       return res.status(200).json({
         success: true,

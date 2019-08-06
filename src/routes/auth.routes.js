@@ -8,6 +8,6 @@ router.post('/login', authController.login);
 router.post('/register', authController.register);
 
 // Development only
-router.get('/create_admin', authController.createAdmin);
+router.get('/create-admin', authController.createAdmin);
 
 module.exports = router;
