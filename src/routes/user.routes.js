@@ -1,15 +1,16 @@
-const router = require('express').Router();
+const { Router } = require('express');
 const userController = require('../controllers/user.controller');
-const authCheck = require('../middlewares/auth');
-const rolesCheck = require('../middlewares/rolesCheck');
+const auth = require('../middlewares/auth');
+const admin = require('../middlewares/admin');
+
+const router = Router();
 
 // Check authentication for all user routes
-router.use(authCheck);
+router.use(auth);
 
 // Admin routes
-router.get('/', rolesCheck, userController.getAllUser);
-router.get('/:_id', rolesCheck, userController.getUserById);
-
+router.get('/', admin, userController.getAllUser);
+router.get('/:id', admin, userController.getUserById);
 // User routes
 router.get('/profile', userController.viewProfile);
 router.post('/profile/update', userController.updateProfile);

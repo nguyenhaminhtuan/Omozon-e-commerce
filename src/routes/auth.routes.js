@@ -1,11 +1,12 @@
-const router = require('express').Router();
-const { celebrate } = require('celebrate');
+const { Router } = require('express');
 const authController = require('../controllers/auth.controller');
-const authValidate = require('../validations/auth.validate');
+const authSchema = require('../validations/auth.validate');
+const validte = require('../middlewares/validate');
 
-router.use(celebrate(authValidate.auth));
-router.post('/login', authController.login);
-router.post('/register', authController.register);
+const router = Router();
+
+router.post('/login', validte(authSchema.login), authController.login);
+router.post('/register', validte(authSchema.register), authController.register);
 
 // Development only
 router.get('/create-admin', authController.createAdmin);

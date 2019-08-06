@@ -1,24 +1,16 @@
-const router = require('express').Router();
-const authCheck = require('../middlewares/auth');
-const rolesCheck = require('../middlewares/rolesCheck');
+const { Router } = require('express');
+const auth = require('../middlewares/auth');
+const admin = require('../middlewares/admin');
 const productController = require('../controllers/product.controller');
+
+const router = Router();
 
 // Routes for all
 router.get('/', productController.fetchProdcut);
-router.get('/:_id', productController.getProductById);
-
+router.get('/:id', productController.getProductById);
 // Admin routes
-router.post('/add', authCheck, rolesCheck, productController.addProduct);
-router.put(
-  '/update/:_id',
-  authCheck,
-  rolesCheck,
-  productController.updateProduct
-);
-router.delete(
-  '/remove/:_id',
-  authCheck,
-  rolesCheck,
-  productController.removeProduct
-);
+router.post('/', auth, admin, productController.addProduct);
+router.put('/:id', auth, admin, productController.updateProduct);
+router.delete('/:id', auth, admin, productController.removeProduct);
+
 module.exports = router;
