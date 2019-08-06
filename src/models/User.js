@@ -4,10 +4,17 @@ const config = require('../config');
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
-  username: { type: String, required: true, unique: true },
+  email: {
+    type: String,
+    trim: true,
+    lowercase: true,
+    required: true,
+    unique: true
+  },
   password: { type: String, required: true },
+  name: { type: String, required: true },
   address: { type: String },
-  roles: { type: String, enum: ['admin', 'user'], default: 'user' },
+  isAdmin: { type: Boolean, default: false },
   orders: [{ type: Schema.Types.ObjectId, ref: 'Order' }],
   createAt: { type: Date, default: Date.now() }
 });
