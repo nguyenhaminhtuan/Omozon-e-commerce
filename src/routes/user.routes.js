@@ -8,13 +8,23 @@ const validate = require('../middlewares/validate');
 const router = Router();
 
 // For all
-router.post('/', userController.createUser);
+router.post('/', validate(userSchema.create), userController.createUser);
+// User routes
+router.get('/profile', auth, userController.viewProfile);
+router.post(
+  '/profile',
+  auth,
+  validate(userSchema.user),
+  userController.updateProfile
+);
+router.post(
+  '/change-password',
+  auth,
+  validate(userSchema.password),
+  userController.changePassword
+);
 // Admin routes
 router.get('/', auth, admin, userController.fetchUser);
 router.get('/:id', auth, admin, userController.getUserById);
-// User routes
-router.get('/profile', auth, userController.viewProfile);
-router.post('/profile', auth, userController.updateProfile);
-router.post('/change-password', auth, userController.changePassword);
 
 module.exports = router;
