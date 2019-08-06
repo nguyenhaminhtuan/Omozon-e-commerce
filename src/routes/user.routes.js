@@ -12,7 +12,7 @@ router.get('/', auth, admin, userController.getAllUser);
 router.get('/:id', auth, admin, userController.getUserById);
 // User routes
 router.get('/profile', auth, userController.viewProfile);
-router.post('/profile/update', auth, userController.updateProfile);
+router.post('/profile', auth, userController.updateProfile);
 router.post('/change-password', auth, userController.changePassword);
 
 module.exports = router;
