@@ -5,14 +5,14 @@ const admin = require('../middlewares/admin');
 
 const router = Router();
 
-// Check authentication for all user routes
-router.use(auth);
-
+// For all
+router.post('/', userController.createUser);
 // Admin routes
-router.get('/', admin, userController.getAllUser);
-router.get('/:id', admin, userController.getUserById);
+router.get('/', auth, admin, userController.getAllUser);
+router.get('/:id', auth, admin, userController.getUserById);
 // User routes
-router.get('/profile', userController.viewProfile);
-router.post('/profile/update', userController.updateProfile);
+router.get('/profile', auth, userController.viewProfile);
+router.post('/profile/update', auth, userController.updateProfile);
+router.post('/change-password', auth, userController.changePassword);
 
 module.exports = router;
