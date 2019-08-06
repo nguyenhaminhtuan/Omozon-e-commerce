@@ -6,6 +6,7 @@ const morgan = require('morgan');
 const routes = require('./routes');
 const config = require('./config');
 const allowDomain = require('./middlewares/allowDonmains');
+require('express-async-errors');
 
 // Create Express server
 const server = express();
