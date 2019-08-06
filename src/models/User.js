@@ -14,7 +14,7 @@ const userSchema = new Schema({
   password: { type: String, required: true },
   name: { type: String, required: true },
   address: { type: String },
-  isAdmin: { type: Boolean, default: false },
+  isAdmin: { type: Boolean, default: false, required: true },
   orders: [{ type: Schema.Types.ObjectId, ref: 'Order' }],
   createAt: { type: Date, default: Date.now() }
 });
