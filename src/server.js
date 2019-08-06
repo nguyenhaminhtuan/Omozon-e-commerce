@@ -7,7 +7,6 @@ const routes = require('./routes');
 const config = require('./config');
 const errors = require('./middlewares/error');
 const allowDomain = require('./middlewares/allowDonmains');
-require('express-async-errors');
 
 // Create Express server
 const server = express();
@@ -33,7 +32,6 @@ server.use(morgan('dev'));
 
 // Using routes
 server.use('/api', routes);
-
 // Middleware handle errors
 server.use(errors.notFound);
 server.use(errors.handler);
