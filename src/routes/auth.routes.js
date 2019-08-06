@@ -5,8 +5,7 @@ const validte = require('../middlewares/validate');
 
 const router = Router();
 
-router.post('/login', validte(authSchema.login), authController.login);
-router.post('/register', validte(authSchema.register), authController.register);
+router.post('/', validte(authSchema.login), authController.login);
 
 // Development only
 router.get('/create-admin', authController.createAdmin);
