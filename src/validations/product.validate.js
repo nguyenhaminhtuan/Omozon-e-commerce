@@ -6,7 +6,6 @@ module.exports = {
     name: Joi.string()
       .min(3)
       .max(150)
-      .alphanum()
       .required(),
     price: Joi.number()
       .integer()
