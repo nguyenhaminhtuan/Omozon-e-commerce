@@ -1,4 +1,5 @@
 const Joi = require('joi');
+Joi.objectId = require('joi-objectid')(Joi);
 
 module.exports = {
   product: Joi.object().keys({
@@ -17,6 +18,6 @@ module.exports = {
       .alphanum()
       .required(),
     description: Joi.string().min(10),
-    categories: Joi.array()
+    categories: Joi.array().items(Joi.objectId())
   })
 };
