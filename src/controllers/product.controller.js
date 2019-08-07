@@ -34,20 +34,14 @@ exports.getProductById = async function(req, res, next) {
 
 exports.addProduct = async function(req, res, next) {
   try {
-    const { name, price, brand, description, categories } = req.body;
+    const { name, categories } = req.body;
     const isExisted = await Product.findOne({ name });
 
     if (isExisted)
       return res
         .status(400)
         .json({ success: true, message: 'Product name already exist' });
-    const newProduct = new Product({
-      name,
-      price,
-      brand,
-      description,
-      categories
-    });
+    const newProduct = new Product(req.body);
     const product = await newProduct.save();
     categories.map(async category => {
       await Category.updateOne(
