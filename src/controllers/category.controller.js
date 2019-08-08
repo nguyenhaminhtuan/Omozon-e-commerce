@@ -124,6 +124,15 @@ exports.addProduct = async function(req, res, next) {
         message: `There is no product with id ${req.body.productId}`
       });
 
+    const isExisted = category.products.find(
+      productId => productId.toString() === product.id
+    );
+
+    if (isExisted)
+      return res
+        .status(400)
+        .json({ success: false, message: 'Product already exist in category' });
+
     category.products.push(product._id);
     product.categories.push(category._id);
 

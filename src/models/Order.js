@@ -4,6 +4,7 @@ const Schema = mongoose.Schema;
 const orderSchema = new Schema({
   user: { type: Schema.Types.ObjectId, ref: 'User' },
   product: { type: Schema.Types.ObjectId, ref: 'Product' },
+  isPaid: { type: Boolean, default: false },
   orderAt: { type: Date, default: Date.now() }
 });
 

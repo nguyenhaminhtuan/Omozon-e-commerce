@@ -8,14 +8,14 @@ const validate = require('../middlewares/validate');
 const router = Router();
 
 router.put(
-  '/:id/add-product',
+  '/add-product/:id',
   auth,
   admin,
   validate(categorySchema.product),
   categoryController.addProduct
 );
 router.put(
-  '/:id/remove-product',
+  '/remove-product/:id',
   auth,
   admin,
   validate(categorySchema.product),
