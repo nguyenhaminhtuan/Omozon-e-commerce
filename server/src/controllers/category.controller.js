@@ -10,7 +10,7 @@ exports.getAllCategories = catchAsync(async (req, res) => {
 });
 
 exports.getCategory = catchAsync(async (req, res) => {
-  const category = await Category.findById(req.params);
+  const category = await Category.findById(req.params.id);
 
   if (!category)
     return res.status(404).json({ message: 'Category not found!' });
@@ -35,7 +35,7 @@ exports.createCategory = catchAsync(async (req, res) => {
 });
 
 exports.updateCategory = catchAsync(async (req, res) => {
-  const category = await Category.findByIdAndUpdate(req.params, req.body, {
+  const category = await Category.findByIdAndUpdate(req.params.id, req.body, {
     new: true
   });
 
@@ -48,7 +48,7 @@ exports.updateCategory = catchAsync(async (req, res) => {
 });
 
 exports.deleteCategory = catchAsync(async (req, res) => {
-  const category = await Category.findByIdAndDelete(req.params);
+  const category = await Category.findByIdAndDelete(req.params.id);
 
   if (!category)
     return res.status(404).json({ message: 'Category not found!' });
