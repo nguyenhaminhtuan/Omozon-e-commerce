@@ -4,7 +4,8 @@
   "main": "src/server.js",
   "license": "MIT",
   "scripts": {
-    "dev": "nodemon src/sever.js"
+    "start": "nodemon src/sever.js",
+    "start:prod": "NODE_ENV=production node src/server.js"
   },
   "dependencies": {
     "bcrypt": "^3.0.6",
