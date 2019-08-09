@@ -1,4 +1,5 @@
 const Product = require('../models/product.model');
+const Category = require('../models/category.model');
 const catchAsync = require('../utils/catchAsync');
 
 exports.getAllProducts = catchAsync(async (req, res) => {
@@ -25,6 +26,10 @@ exports.createProduct = catchAsync(async (req, res) => {
 
   const product = new Product(req.body);
   await product.save();
+  await Category.updateOne(
+    { _id: product.category },
+    { $push: { products: product._id } }
+  );
 
   return res
     .status(201)
@@ -51,7 +56,13 @@ exports.updateProduct = catchAsync(async (req, res) => {
 });
 
 exports.deleteProduct = catchAsync(async (req, res) => {
-  const product = await Product.findById(req.params.id);
+  const product = await Product.findByIdAndDelete(req.params.id).populate(
+    'category'
+  );
+  await Category.updateOne(
+    { _id: product.category },
+    { $pull: { products: product._id } }
+  );
 
   if (!product) return res.status(400).json({ message: 'Product not found!' });
 
