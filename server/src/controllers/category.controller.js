@@ -2,7 +2,7 @@ const Category = require('../models/category.model');
 const catchAsync = require('../utils/catchAsync');
 
 exports.getAllCategories = catchAsync(async (req, res) => {
-  const categories = await Category.find();
+  const categories = await Category.find().sort({ createAt: -1 });
 
   return res
     .status(200)
@@ -35,6 +35,11 @@ exports.createCategory = catchAsync(async (req, res) => {
 });
 
 exports.updateCategory = catchAsync(async (req, res) => {
+  const isExisted = await Category.findOne(req.body);
+
+  if (isExisted)
+    return res.status(400).json({ message: 'Category name already exist' });
+
   const category = await Category.findByIdAndUpdate(req.params.id, req.body, {
     new: true
   });
