@@ -5,7 +5,8 @@
     "prettier/prettier": ["error", { "singleQuote": true }],
     "no-console": "off",
     "consistent-return": "off",
-    "no-unused-vars": ["error", { "argsIgnorePattern": "req|res|next" }]
+    "no-unused-vars": ["error", { "argsIgnorePattern": "req|res|next" }],
+    "no-underscore-dangle": "off"
   },
   "env": {
     "node": true
