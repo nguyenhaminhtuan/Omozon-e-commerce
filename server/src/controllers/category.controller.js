@@ -1,8 +1,11 @@
 const Category = require('../models/category.model');
+const Product = require('../models/product.model');
 const catchAsync = require('../utils/catchAsync');
 
 exports.getAllCategories = catchAsync(async (req, res) => {
-  const categories = await Category.find().sort({ createAt: -1 });
+  const categories = await Category.find()
+    .sort({ createAt: -1 })
+    .populate('products');
 
   return res
     .status(200)
@@ -10,7 +13,7 @@ exports.getAllCategories = catchAsync(async (req, res) => {
 });
 
 exports.getCategory = catchAsync(async (req, res) => {
-  const category = await Category.findById(req.params.id);
+  const category = await Category.findById(req.params.id).populate('product');
 
   if (!category)
     return res.status(404).json({ message: 'Category not found!' });
@@ -58,5 +61,9 @@ exports.deleteCategory = catchAsync(async (req, res) => {
   if (!category)
     return res.status(404).json({ message: 'Category not found!' });
 
+  await Product.updateMany(
+    { category: category._id },
+    { $unset: { category: '' } }
+  );
   return res.status(204).json({ message: 'Category removed', data: null });
 });

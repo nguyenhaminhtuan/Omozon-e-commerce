@@ -22,14 +22,17 @@ exports.createProduct = catchAsync(async (req, res) => {
   const isExisted = await Product.findOne({ name: req.body.name });
 
   if (isExisted)
-    return res.status(400).json({ message: 'Product already exist' });
+    return res.status(400).json({ message: 'Product name already exist' });
+
+  const category = await Category.findById(req.body.category);
+
+  if (!category)
+    return res.status(400).json({ message: "Category doesn't exist!" });
 
   const product = new Product(req.body);
   await product.save();
-  await Category.updateOne(
-    { _id: product.category },
-    { $push: { products: product._id } }
-  );
+  category.products.push(product.id);
+  await category.save();
 
   return res
     .status(201)
@@ -46,6 +49,16 @@ exports.updateProduct = catchAsync(async (req, res) => {
   if (existed.id !== product.id && existed.name === req.body.name)
     return res.status(400).json({ message: 'Product already exist' });
 
+  const category = await Category.findById(req.body.category);
+
+  if (!category)
+    return res.status(400).json({ message: "Category doesn't exist!" });
+
+  if (req.body.category !== product.category) {
+    category.products.push(product._id);
+    await category.save();
+  }
+
   const productUpdate = await Product.findByIdAndUpdate(product.id, req.body, {
     new: true
   });
@@ -56,15 +69,13 @@ exports.updateProduct = catchAsync(async (req, res) => {
 });
 
 exports.deleteProduct = catchAsync(async (req, res) => {
-  const product = await Product.findByIdAndDelete(req.params.id).populate(
-    'category'
-  );
+  const product = await Product.findByIdAndDelete(req.params.id);
+
+  if (!product) return res.status(400).json({ message: 'Product not found!' });
+
   await Category.updateOne(
     { _id: product.category },
     { $pull: { products: product._id } }
   );
-
-  if (!product) return res.status(400).json({ message: 'Product not found!' });
-
   return res.status(204).json({ message: 'Product removed', data: null });
 });
