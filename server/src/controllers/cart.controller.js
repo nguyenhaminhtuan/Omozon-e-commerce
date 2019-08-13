@@ -43,16 +43,16 @@ exports.createCart = catchAsync(async (req, res) => {
 });
 
 exports.updateQuantity = catchAsync(async (req, res) => {
-  const order = await Order.updateOne(
-    { _id: req.params.id, user: req.user.id },
-    { $set: { quantity: req.body.quantity } }
-  );
+  const cart = await Order.findOne({ _id: req.params.id, user: req.user.id });
 
-  if (!order) return res.status(404).json({ message: 'Cart not found!' });
+  if (!cart) return res.status(404).json({ message: 'Cart not found!' });
+
+  cart.quantity = req.body.quantity;
+  await cart.save();
 
   return res
     .status(200)
-    .json({ message: 'Order quantity updated', data: { order } });
+    .json({ message: 'Order quantity updated', data: { cart } });
 });
 
 exports.paid = catchAsync(async (req, res) => {
