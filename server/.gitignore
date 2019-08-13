@@ -6,3 +6,6 @@ node_modules/
 
 # Environment variables
 .env
+
+#products image
+public/img/products/product*
