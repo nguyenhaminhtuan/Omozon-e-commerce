@@ -7,6 +7,6 @@ const router = express.Router();
 
 router.use(auth, admin);
 router.get('/', orderController.getAllOrders);
-router.get('/:id', orderController.getAllCarts);
+router.get('/:id', orderController.getOrder);
 
 module.exports = router;
