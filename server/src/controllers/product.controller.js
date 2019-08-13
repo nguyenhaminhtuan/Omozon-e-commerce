@@ -1,6 +1,16 @@
+const fs = require('fs');
 const Product = require('../models/product.model');
 const Category = require('../models/category.model');
 const catchAsync = require('../utils/catchAsync');
+
+function removeImg(path) {
+  return new Promise((resolve, reject) => {
+    fs.unlink(path, err => {
+      if (err) reject(err);
+      resolve();
+    });
+  });
+}
 
 exports.getAllProducts = catchAsync(async (req, res) => {
   const products = await Product.find().sort({ createAt: -1 });
@@ -28,6 +38,8 @@ exports.createProduct = catchAsync(async (req, res) => {
 
   if (!category)
     return res.status(400).json({ message: "Category doesn't exist!" });
+
+  if (req.file) req.body.image = req.file.filename;
 
   const product = new Product(req.body);
   await product.save();
@@ -59,6 +71,8 @@ exports.updateProduct = catchAsync(async (req, res) => {
     await category.save();
   }
 
+  if (req.file) req.body.image = req.file.filename;
+
   const productUpdate = await Product.findByIdAndUpdate(product.id, req.body, {
     new: true
   });
@@ -77,5 +91,8 @@ exports.deleteProduct = catchAsync(async (req, res) => {
     { _id: product.category },
     { $pull: { products: product._id } }
   );
+
+  await removeImg(`public/img/products/${product.image}`);
+
   return res.status(204).json({ message: 'Product removed', data: null });
 });
