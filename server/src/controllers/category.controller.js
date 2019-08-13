@@ -5,7 +5,7 @@ const catchAsync = require('../utils/catchAsync');
 exports.getAllCategories = catchAsync(async (req, res) => {
   const categories = await Category.find()
     .sort({ createAt: -1 })
-    .populate('products');
+    .populate({ path: 'products', select: '-category -description' });
 
   return res
     .status(200)
