@@ -15,11 +15,10 @@ export default class Product extends React.Component {
   }
 
   async componentDidMount() {
-    await this.fetchALlProduct();
-    console.log(this.state.products);
+    await this.fetchALlProducts();
   }
 
-  async fetchALlProduct() {
+  async fetchALlProducts() {
     const respone = await fetch('http://localhost:5000/api/products');
     const data = await respone.json();
     this.setState({
