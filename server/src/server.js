@@ -23,7 +23,7 @@ server.use(allowDonmain);
 server.use(morgan('dev'));
 server.use(express.json());
 server.use(express.urlencoded({ extended: true }));
-server.use(express.static(`${__dirname}/public`));
+server.use('/static', express.static('public'));
 
 server.use('/api', routes);
 server.use(error.notFound);
