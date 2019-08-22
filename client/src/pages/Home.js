@@ -9,6 +9,7 @@ import {
   faUserCircle,
   faAward
 } from '@fortawesome/free-solid-svg-icons';
+import { NavLink } from 'react-router-dom';
 
 export default class Home extends Component {
   render() {
@@ -30,12 +31,14 @@ export default class Home extends Component {
         <IntroSection className='intro-section'>
           <Forward className='forward'>
             <h1 className='display-4 mb-4'>Everything you need...</h1>
-            <Button variant='primary' className='w-25 mr-3'>
+            <NavLink to='/product' className='btn btn-primary w-25 mr-3'>
               Let's go >>
-            </Button>
-            <Button variant='outline-success' className='text-white w-25'>
+            </NavLink>
+            <NavLink
+              to='/signin'
+              className='btn btn-outline-success text-white w-25'>
               Sign in
-            </Button>
+            </NavLink>
           </Forward>
         </IntroSection>
         <Container className='future-section mt-5 mb-5 d-flex flex-column flex-md-row justify-content-evenly'>
