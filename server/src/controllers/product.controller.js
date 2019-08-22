@@ -15,7 +15,9 @@ function removeImg(path) {
 exports.getAllProducts = catchAsync(async (req, res) => {
   const products = await Product.find().sort({ createAt: -1 });
 
-  return res.status(200).json({ message: 'Fetched all product', products });
+  return res
+    .status(200)
+    .json({ message: 'Fetched all product', data: { products } });
 });
 
 exports.getProduct = catchAsync(async (req, res) => {
@@ -92,7 +94,9 @@ exports.deleteProduct = catchAsync(async (req, res) => {
     { $pull: { products: product._id } }
   );
 
-  await removeImg(`public/img/products/${product.image}`);
+  if (product.image !== 'default.png') {
+    await removeImg(`public/img/products/${product.image}`);
+  }
 
   return res.status(204).json({ message: 'Product removed', data: null });
 });
