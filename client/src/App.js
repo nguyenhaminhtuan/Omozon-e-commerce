@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
-import AdminNavbar from './Components/Layouts/AdminNavbar';
+import AdminNavbar from './Components/layouts/AdminNavbar';
 import Product from './Pages/Product';
 
 function App() {
