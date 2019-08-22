@@ -23,7 +23,7 @@ export default function MainNavbar(props) {
       sticky='top'
       className='main-nav-bar shadow'
       style={{
-        backgroundColor: 'rgb(255, 255, 255, 0.4)'
+        backgroundColor: 'rgb(255, 255, 255, 0.9)'
       }}>
       <Container>
         <NavLink to='/' className='navbar-brand'>
