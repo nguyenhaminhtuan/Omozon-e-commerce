@@ -9,11 +9,8 @@ export default function ListProducts(props) {
         <Col key={index} md='3' className='mb-4'>
           <ProductItem
             key={product._id}
-            id={product._id}
-            image={product.image}
-            name={product.name}
-            price={product.price}
-            description={product.description}
+            product={product}
+            remove={props.remove}
           />
         </Col>
       ))}
