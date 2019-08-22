@@ -41,10 +41,10 @@ export default function MainNavbar(props) {
             {props.navs.map((nav, index) => (
               <NavLink
                 key={index}
-                to={nav === 'HOME' ? '/' : `${nav.toLowerCase()}`}
+                to={nav === 'home' ? '/' : `${nav.split(' ').join('')}`}
                 className='nav nav-link text-primary custom-link text-center'
                 style={linkStyle}>
-                {nav}
+                {nav.toUpperCase()}
               </NavLink>
             ))}
           </ListItem>
@@ -55,5 +55,5 @@ export default function MainNavbar(props) {
 }
 
 MainNavbar.defaultProps = {
-  navs: ['HOME', 'PRODUCT', 'CATEGORY', 'SIGN IN']
+  navs: ['home', 'products', 'categories', 'sign up']
 };
