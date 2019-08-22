@@ -42,7 +42,12 @@ export default function ProductItem(props) {
     <div className='product-item'>
       <Card className='product-card-info'>
         <ProductWrapper onClick={() => setButton('details')}>
-          <Card.Img variant='top' src={productImg} alt={props.product.name} />
+          <Card.Img
+            variant='top'
+            className='px-3 py-1'
+            src={productImg}
+            alt={props.product.name}
+          />
           <Card.Body>
             <Card.Title>{props.product.name}</Card.Title>
             <Card.Subtitle style={{ color: '#00D233' }}>
