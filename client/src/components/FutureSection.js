@@ -3,7 +3,6 @@ import styled from 'styled-components';
 
 export default function FutureSection(props) {
   const Section = styled.section`
-    max-width: 33%;
     text-align: center;
     color: #fff;
     border-radius: 5px;
@@ -14,14 +13,14 @@ export default function FutureSection(props) {
     color: #000;
   `;
   const FutureIcon = styled.div`
-    font-size: 50px;
+    font-size: 60px;
   `;
 
   return (
-    <Section className='future shadow-lg ml-2 mr-2'>
+    <Section className='future shadow m-2 p-2'>
       <FutureIcon className='future-icon'>{props.icon}</FutureIcon>
       <TextBody>
-        <p className='text-white pb-4'>{props.text}</p>
+        <p className='text-white pb-4 pt-2'>{props.text}</p>
       </TextBody>
     </Section>
   );

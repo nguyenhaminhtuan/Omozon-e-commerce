@@ -38,7 +38,7 @@ export default class Home extends Component {
             </Button>
           </Forward>
         </IntroSection>
-        <Container className='future-section mt-5 mb-5 d-flex justify-content-evenly'>
+        <Container className='future-section mt-5 mb-5 d-flex flex-column flex-md-row justify-content-evenly'>
           <FutureSection
             icon={<FontAwesomeIcon icon={faInfoCircle} />}
             text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book"
