@@ -40,8 +40,8 @@ export default function AdminNavbar(props) {
 
   return (
     <Navbar bg='dark' expand='lg' className='admin-navbar'>
-      <Navbar.Toggle aria-controls='navbar-collapse' />
-      <Navbar.Collapse id='navbar-collapse'>
+      <Navbar.Toggle aria-controls='admin-navbar-collapse' />
+      <Navbar.Collapse id='admin-navbar-collapse'>
         <Container fluid>
           <Row>
             <Col lg='2' className='sidebar fixed-top' style={SideBarStyle}>

@@ -1,15 +1,18 @@
 import React from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
-import AdminNavbar from './Components/layouts/AdminNavbar';
-import Product from './Pages/Product';
+import AdminNavbar from './components/layouts/AdminNavbar';
+import Product from './pages/Product';
+import MainNavbar from './components/layouts/MainNavbar';
+import Home from './pages/Home';
 
 function App() {
   return (
     <div className='App'>
       <BrowserRouter>
         <React.Fragment>
-          <AdminNavbar />
+          <MainNavbar />
           <Switch>
+            <Route exact path='/' component={Home} />
             <Route path='/product' component={Product} />
           </Switch>
         </React.Fragment>

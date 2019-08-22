@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Container, Row, Button, Col } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
-import ListProducts from '../Components/ListProducts';
+import ListProducts from '../components/ListProducts';
 
 export default class Product extends Component {
   constructor(props) {
