@@ -1,7 +1,14 @@
 import React, { Component } from 'react';
 import backgroundImage from '../assets/image/background-landing.jpg';
 import styled from 'styled-components';
+import FutureSection from '../components/FutureSection';
 import { Container, Button } from 'react-bootstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faInfoCircle,
+  faUserCircle,
+  faAward
+} from '@fortawesome/free-solid-svg-icons';
 
 export default class Home extends Component {
   render() {
@@ -31,7 +38,20 @@ export default class Home extends Component {
             </Button>
           </Forward>
         </IntroSection>
-        <Container>Home</Container>
+        <Container className='future-section mt-5 mb-5 d-flex justify-content-evenly'>
+          <FutureSection
+            icon={<FontAwesomeIcon icon={faInfoCircle} />}
+            text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book"
+          />
+          <FutureSection
+            icon={<FontAwesomeIcon icon={faUserCircle} />}
+            text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book"
+          />
+          <FutureSection
+            icon={<FontAwesomeIcon icon={faAward} />}
+            text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book"
+          />
+        </Container>
       </div>
     );
   }
