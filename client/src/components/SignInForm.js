@@ -7,7 +7,8 @@ import {
   FormGroup,
   Row,
   Col,
-  Button
+  Button,
+  Alert
 } from 'react-bootstrap';
 
 export default class SignInForm extends Component {
@@ -16,11 +17,13 @@ export default class SignInForm extends Component {
 
     this.state = {
       email: '',
-      password: ''
+      password: '',
+      showMessage: this.props.message ? true : false
     };
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleShowMessage = this.handleShowMessage.bind(this);
   }
 
   handleChange(event) {
@@ -32,7 +35,11 @@ export default class SignInForm extends Component {
   handleSubmit(event) {
     event.preventDefault();
     const { email, password } = this.state;
-    this.props.signin({ email, password });
+    this.props.submit({ email, password });
+  }
+
+  handleShowMessage() {
+    setTimeout(() => this.setState({ showMessage: false }), 1000);
   }
 
   render() {
@@ -42,6 +49,14 @@ export default class SignInForm extends Component {
         className='bg-white rounded shadow px-5 py-4'
         onSubmit={this.handleSubmit}>
         <h1 className='text-center text-primary mb-4 mt-3'>Sign In</h1>
+        {this.state.showMessage && (
+          <Alert
+            variant='danger'
+            className='text-center p-1'
+            style={{ marginTop: '-10px' }}>
+            {this.props.message}
+          </Alert>
+        )}
         <FormGroup as={Row} className='mb-4'>
           <Col sm='1' className='d-flex align-items-center justify-content-end'>
             <FontAwesomeIcon
@@ -55,8 +70,9 @@ export default class SignInForm extends Component {
               id='email'
               name='email'
               type='email'
-              onChange={this.handleChange}
               placeholder='Enter your email'
+              onChange={this.handleChange}
+              onFocus={this.handleShowMessage}
               required
             />
           </Col>
@@ -74,8 +90,9 @@ export default class SignInForm extends Component {
               id='password'
               name='password'
               type='password'
-              onChange={this.handleChange}
               placeholder='Enter your password'
+              onChange={this.handleChange}
+              onFocus={this.handleShowMessage}
               required
             />
           </Col>
