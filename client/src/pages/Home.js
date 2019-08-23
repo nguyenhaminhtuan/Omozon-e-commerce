@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import backgroundImage from '../assets/image/background-landing.jpg';
 import styled from 'styled-components';
 import FutureSection from '../components/FutureSection';
-import { Container, Button } from 'react-bootstrap';
+import { Container } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faInfoCircle,
