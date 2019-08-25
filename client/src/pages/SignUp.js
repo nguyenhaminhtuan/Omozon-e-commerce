@@ -1,33 +1,57 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAt, faLock, faUser } from '@fortawesome/free-solid-svg-icons';
-import {
-  Form,
-  FormControl,
-  Container,
-  FormGroup,
-  Row,
-  Col,
-  Button
-} from 'react-bootstrap';
+import { Container } from 'react-bootstrap';
+import SignUpForm from '../components/SignUpForm';
 
 export default class SignUp extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      user: {}
+      user: {},
+      isSubmit: false,
+      message: '',
+      success: false
     };
 
-    this.handleOnchange = this.handleOnchange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
+    this.signUp = this.signUp.bind(this);
   }
 
-  handleOnchange() {}
+  async componentDidUpdate() {
+    const { isSubmit, success } = this.state;
 
-  handleSubmit() {}
+    if (isSubmit && !success) await this.signUp();
+  }
+
+  onSubmit(user) {
+    this.setState({ user, isSubmit: true });
+  }
+
+  async signUp() {
+    const respone = await fetch(`${process.env.REACT_APP_API}/auth/signup`, {
+      method: 'POST',
+      headers: {
+        'Content-type': 'application/json'
+      },
+      body: JSON.stringify(this.state.user)
+    });
+    const { message } = await respone.json();
+
+    if (respone.status === 400) {
+      this.setState({
+        isSubmit: false,
+        message,
+        success: false
+      });
+    } else if (respone.status === 201) {
+      this.setState({
+        isSubmit: false,
+        message,
+        success: true
+      });
+    }
+  }
 
   render() {
     const FormWrapper = styled.div`
@@ -43,84 +67,16 @@ export default class SignUp extends Component {
         max-width: 50%;
       }
     `;
+    const { success, message } = this.state;
 
     return (
       <Container className='sign-in mt-5'>
         <FormWrapper>
-          <Form id='sign-in-form' className='bg-white rounded shadow px-5 py-4'>
-            <h1 className='text-center text-primary mb-4 mt-3'>Sign Up</h1>
-            <FormGroup as={Row} className='mb-4'>
-              <Col
-                sm='1'
-                className='d-flex align-items-center justify-content-end'>
-                <FontAwesomeIcon
-                  icon={faAt}
-                  style={{ fontSize: '25px' }}
-                  className='d-none d-sm-block'
-                />
-              </Col>
-              <Col sm='11'>
-                <FormControl
-                  id='email'
-                  className=''
-                  type='email'
-                  placeholder='Enter your email'
-                  required
-                />
-              </Col>
-            </FormGroup>
-            <FormGroup as={Row} className='mb-4'>
-              <Col
-                sm='1'
-                className='d-flex align-items-center justify-content-end'>
-                <FontAwesomeIcon
-                  icon={faUser}
-                  style={{ fontSize: '25px' }}
-                  className='d-none d-sm-block'
-                />
-              </Col>
-              <Col sm='11'>
-                <FormControl
-                  id='name'
-                  className=''
-                  type='text'
-                  placeholder='Enter your name'
-                  required
-                />
-              </Col>
-            </FormGroup>
-            <FormGroup as={Row} className='mb-4'>
-              <Col
-                sm='1'
-                className='d-flex align-items-center justify-content-end'>
-                <FontAwesomeIcon
-                  icon={faLock}
-                  style={{ fontSize: '25px' }}
-                  className='d-none d-sm-block'
-                />
-              </Col>
-              <Col sm='11'>
-                <FormControl
-                  id='password'
-                  className=''
-                  type='password'
-                  placeholder='Enter your password'
-                  required
-                />
-              </Col>
-            </FormGroup>
-            <FormGroup className='text-center mt-4'>
-              <Button
-                type='submit'
-                variant='primary'
-                className='d-block w-50 mx-auto mb-3'>
-                Sign up
-              </Button>
-              <Link to='/signin' style={{ textDecoration: 'underline' }}>
-                Sign in
-              </Link>
-            </FormGroup>
-          </Form>
+          <SignUpForm
+            submit={this.onSubmit}
+            success={success}
+            message={message}
+          />
         </FormWrapper>
       </Container>
     );
