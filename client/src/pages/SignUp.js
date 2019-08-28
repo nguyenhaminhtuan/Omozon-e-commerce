@@ -41,13 +41,13 @@ export default class SignUp extends Component {
     if (respone.status === 400) {
       this.setState({
         isSubmit: false,
-        message,
+        message: message.split('"').join(''),
         success: false
       });
     } else if (respone.status === 201) {
       this.setState({
         isSubmit: false,
-        message,
+        message: message.split('"').join(''),
         success: true
       });
     }
