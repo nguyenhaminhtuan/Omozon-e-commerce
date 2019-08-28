@@ -32,7 +32,7 @@ export default class Home extends Component {
           <Forward className='forward'>
             <h1 className='display-4 mb-4'>Everything you need...</h1>
             <NavLink
-              to='/product'
+              to='/products'
               className='btn btn-primary mr-3'
               style={{ width: '150px', maxWidth: '40%' }}>
               Let's go >>
