@@ -1,5 +1,12 @@
 import React, { Component } from 'react';
-import { Container, Row, Button, Col } from 'react-bootstrap';
+import {
+  Container,
+  Row,
+  Button,
+  Col,
+  Breadcrumb,
+  Dropdown
+} from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import ListProducts from '../components/ListProducts';
@@ -39,12 +46,30 @@ export default class Product extends Component {
   render() {
     return (
       <Container className='product-section pt-3'>
-        <Row className='control'>
+        {this.props.admin && (
+          <Row className='control'>
+            <Col>
+              <Button variant='success' size='lg'>
+                Add
+                <FontAwesomeIcon icon={faPlus} className='ml-2' />
+              </Button>
+            </Col>
+          </Row>
+        )}
+        <Row>
           <Col>
-            <Button variant='success' size='lg'>
-              Add
-              <FontAwesomeIcon icon={faPlus} className='ml-2' />
-            </Button>
+            <Breadcrumb>
+              <Breadcrumb.Item className='d-flex align-items-center'>
+                Products
+              </Breadcrumb.Item>
+              <Dropdown className='ml-auto'>
+                <Dropdown.Toggle className='px-3'>Sort</Dropdown.Toggle>
+                <Dropdown.Menu>
+                  <Dropdown.Item>By Name</Dropdown.Item>
+                  <Dropdown.Item>By Price</Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
+            </Breadcrumb>
           </Col>
         </Row>
         <Row className='product-list mt-4'>
@@ -63,3 +88,7 @@ export default class Product extends Component {
     );
   }
 }
+
+Product.defaultProps = {
+  admin: false
+};
