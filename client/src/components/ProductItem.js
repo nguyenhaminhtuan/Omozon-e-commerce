@@ -6,9 +6,7 @@ import styled from 'styled-components';
 export default function ProductItem(props) {
   const [button, setButton] = useState('');
 
-  const productImg = `${process.env.REACT_APP_IMG}/products/${
-    props.product.image
-  }`;
+  const productImg = `${process.env.REACT_APP_IMG}/products/${props.product.image}`;
 
   const ProductWrapper = styled.div`
     max-width: 100%;
@@ -59,15 +57,23 @@ export default function ProductItem(props) {
           </Card.Body>
         </ProductWrapper>
         <Card.Footer className='d-flex justify-content-center'>
-          <Button id='product-update' variant='warning' className='mr-2'>
-            Update
-          </Button>
-          <Button
-            id='product-delete'
-            variant='danger'
-            onClick={() => setButton('delete')}>
-            Delete
-          </Button>
+          {props.admin ? (
+            <React.Fragment>
+              <Button id='product-update' variant='warning' className='mr-2'>
+                Update
+              </Button>
+              <Button
+                id='product-delete'
+                variant='danger'
+                onClick={() => setButton('delete')}>
+                Delete
+              </Button>
+            </React.Fragment>
+          ) : (
+            <Button id='add-cart' variant='success'>
+              Add to cart
+            </Button>
+          )}
         </Card.Footer>
       </Card>
 
@@ -106,3 +112,7 @@ export default function ProductItem(props) {
     </div>
   );
 }
+
+ProductItem.defaultProps = {
+  admin: false
+};
