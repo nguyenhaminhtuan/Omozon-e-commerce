@@ -82,7 +82,7 @@ export default function MainNavbar(props) {
               ) : (
                 <NavLink
                   key={index}
-                  to={nav === 'home' ? '/' : `${nav.split(' ').join('')}`}
+                  to={nav === 'home' ? '/' : `/${nav.split(' ').join('')}`}
                   className='nav nav-link text-primary custom-link text-center'
                   style={linkStyle}>
                   {nav.toUpperCase()}
