@@ -30,7 +30,7 @@ export default class Categories extends Component {
     });
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps) {
     const curCategoryId = this.props.match.params.categoryId;
     const prevCategoryId = prevProps.match.params.categoryId;
 
@@ -47,12 +47,6 @@ export default class Categories extends Component {
     }
   }
 
-  componentWillUnmount() {
-    this.setState({
-      isLoaded: false
-    });
-  }
-
   async getProductFromCategory(categoryId) {
     const response = await fetch(
       `${process.env.REACT_APP_API}/categories/${categoryId}`
@@ -65,7 +59,7 @@ export default class Categories extends Component {
   render() {
     const { products, isLoaded } = this.state;
     return (
-      <Container>
+      <Container className='pt-5'>
         {isLoaded ? (
           !products[0] ? (
             <h1>Category has no products</h1>
