@@ -5,6 +5,7 @@ import {
   Switch,
   Redirect
 } from 'react-router-dom';
+import storage from '../utils/storage';
 import MainNavbar from '../components/layouts/MainNavbar';
 import SingIn from '../pages/SignIn';
 import SignUp from '../pages/SignUp';
@@ -12,7 +13,7 @@ import Home from '../pages/Home';
 import Products from '../pages/Products';
 import Profile from '../pages/Profile';
 import NotFound from '../pages/NotFound';
-import storage from '../utils/storage';
+import Categories from '../pages/Categories';
 
 export default function Default(props) {
   function Logout() {
@@ -45,6 +46,11 @@ export default function Default(props) {
             />
             <Route path='/products' component={Products} />
             <Route path='/signup' component={SignUp} />
+            <Route
+              exact
+              path='/categories/:categoryId'
+              component={Categories}
+            />
             <Route component={NotFound} />
           </Switch>
         </React.Fragment>
