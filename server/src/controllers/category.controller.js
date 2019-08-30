@@ -13,7 +13,7 @@ exports.getAllCategories = catchAsync(async (req, res) => {
 });
 
 exports.getCategory = catchAsync(async (req, res) => {
-  const category = await Category.findById(req.params.id).populate('product');
+  const category = await Category.findById(req.params.id).populate('products');
 
   if (!category)
     return res.status(404).json({ message: 'Category not found!' });
