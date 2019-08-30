@@ -47,7 +47,9 @@ class App extends Component {
         if (response.status === 'success') {
           const user = response.data.profile;
 
-          if (user.isAdmin) this.setState({ isAdmin: true });
+          if (user.admin) {
+            this.setState({ isAdmin: user.admin });
+          }
 
           this.setState({
             user,
